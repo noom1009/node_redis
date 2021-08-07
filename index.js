@@ -37,26 +37,9 @@ var Storage = multer.diskStorage({
 var upload = multer({
   storage: Storage
 }).single('image');
-//route
-app.get('/', (req, res) => {
-  res.render('index');
-});
 
+ 
 
-
-
-app.get("/noredis", async (req, res) => {
-    let date = req.query.date;
-    let fetch = await axios.get(env.urlCovid19);
-    let data = fetch.data.Data;
-    let result = null;
-    data.forEach((element) => {
-      if (element.Date === date) {
-        result = element;
-      }
-    });
-    result ? res.json(result) : res.status(404).json({ result: "Not found" });
-  });
 
   app.get("/redis", async (req, res) => {
     let date = req.query.date;
