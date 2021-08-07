@@ -9,12 +9,21 @@ const qr = require("qrcode");
 const app = express();
 const fs = require('fs');
 const multer = require('multer');
-var Tesseract = require('tesseract.js');
+const Tesseract = require('tesseract.js');
 const redisClient = redis.createClient();
+const router = require("./routers/index");
 
 app.set("view engine", "ejs");
 app.use(bp.urlencoded({ extended: false }));
 app.use(bp.json());
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use("/public", express.static("public"));
+app.use(express.static(path.join(__dirname, "/public")));
+
+app.use(router);
 
 var Storage = multer.diskStorage({
   destination: (req, file, callback) => {
@@ -33,9 +42,7 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
-app.get('/ocr', (req, res) => {
-  res.render('ocr');
-});
+
 
 
 app.get("/noredis", async (req, res) => {
